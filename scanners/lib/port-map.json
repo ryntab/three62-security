@@ -1,0 +1,294 @@
+{
+    "21": {
+        "service": "FTP",
+        "severity": "high",
+        "category": "file-transfer",
+        "description": "File Transfer Protocol (Plaintext)",
+        "tags": ["plaintext", "credentials", "mitm-risk"],
+        "recommendation": "FTP transmits credentials and data in plaintext, making it trivially sniffable via MitM attack. Disable FTP and migrate to SFTP (port 22) or FTPS (port 990). Restrict with firewall rules if FTP must remain active."
+    },
+    "22": {
+        "service": "SSH",
+        "severity": "low",
+        "category": "remote-access",
+        "description": "Secure Shell"
+    },
+    "23": {
+        "service": "Telnet",
+        "severity": "high",
+        "category": "remote-access",
+        "description": "Unencrypted remote terminal"
+    },
+    "25": {
+        "service": "SMTP",
+        "severity": "info",
+        "category": "mail",
+        "description": "Mail Transfer"
+    },
+    "53": {
+        "service": "DNS",
+        "severity": "info",
+        "category": "dns",
+        "description": "Domain Name System"
+    },
+    "80": {
+        "service": "HTTP",
+        "severity": "info",
+        "category": "web",
+        "description": "Web Server"
+    },
+    "110": {
+        "service": "POP3",
+        "severity": "medium",
+        "category": "mail",
+        "description": "Mail Retrieval (Plaintext)",
+        "tags": ["plaintext", "credentials", "mitm-risk"],
+        "recommendation": "POP3 on port 110 transmits email credentials in plaintext. An attacker on the same network can intercept login details via a passive MitM attack. Disable port 110 and direct clients to POP3S (port 995)."
+    },
+    "143": {
+        "service": "IMAP",
+        "severity": "medium",
+        "category": "mail",
+        "description": "Mail Access (Plaintext)",
+        "tags": ["plaintext", "credentials", "mitm-risk"],
+        "recommendation": "IMAP on port 143 accepts authentication credentials over an unencrypted channel. A passive MitM attacker can capture email account passwords. Disable port 143 and require clients to use IMAPS (port 993)."
+    },
+    "443": {
+        "service": "HTTPS",
+        "severity": "info",
+        "category": "web",
+        "description": "Secure Web Server"
+    },
+    "445": {
+        "service": "SMB",
+        "severity": "high",
+        "category": "file-sharing",
+        "description": "Windows File Sharing"
+    },
+    "465": {
+        "service": "SMTPS",
+        "severity": "info",
+        "category": "mail",
+        "description": "Secure SMTP"
+    },
+    "587": {
+        "service": "SMTP Submission",
+        "severity": "info",
+        "category": "mail",
+        "description": "Mail Submission"
+    },
+    "853": {
+        "service": "DNS over TLS",
+        "severity": "info",
+        "category": "dns",
+        "description": "Encrypted DNS"
+    },
+    "990": {
+        "service": "FTPS",
+        "severity": "low",
+        "category": "file-transfer",
+        "description": "Secure FTP"
+    },
+    "993": {
+        "service": "IMAPS",
+        "severity": "info",
+        "category": "mail",
+        "description": "Secure IMAP (SSL/TLS)",
+        "tags": ["encrypted", "mail"],
+        "recommendation": "IMAPS is the encrypted variant of IMAP and is safe to expose publicly. Ensure TLS certificates are valid and up-to-date. Consider restricting with firewall rules if webmail is not required."
+    },
+    "995": {
+        "service": "POP3S",
+        "severity": "info",
+        "category": "mail",
+        "description": "Secure POP3 (SSL/TLS)",
+        "tags": ["encrypted", "mail"],
+        "recommendation": "POP3S is the encrypted variant of POP3 and is safe to expose publicly. Ensure TLS certificates are valid and up-to-date."
+    },
+    "1433": {
+        "service": "Microsoft SQL Server",
+        "severity": "high",
+        "category": "database",
+        "description": "MSSQL Database"
+    },
+    "1521": {
+        "service": "Oracle Database",
+        "severity": "high",
+        "category": "database",
+        "description": "Oracle Listener"
+    },
+    "2049": {
+        "service": "NFS",
+        "severity": "high",
+        "category": "file-sharing",
+        "description": "Network File System"
+    },
+    "2082": {
+        "service": "cPanel",
+        "severity": "medium",
+        "category": "hosting",
+        "description": "cPanel Control Panel (Plaintext HTTP)",
+        "tags": ["plaintext", "credentials", "shared-hosting"],
+        "recommendation": "cPanel on port 2082 serves the control panel over unencrypted HTTP. Credentials are exposed in transit. Redirect all access to cPanel SSL (port 2083) and consider IP-restricting the panel if shared hosting allows it."
+    },
+    "2083": {
+        "service": "cPanel SSL",
+        "severity": "info",
+        "category": "hosting",
+        "description": "cPanel Control Panel (HTTPS)",
+        "tags": ["encrypted", "shared-hosting"],
+        "recommendation": "cPanel SSL on port 2083 is the standard encrypted entry point for shared hosting environments. This port is expected to be public-facing. Ensure your cPanel TLS certificate is valid and brute-force login protection (cPHulk) is enabled."
+    },
+    "2086": {
+        "service": "WHM",
+        "severity": "medium",
+        "category": "hosting",
+        "description": "WHM Web Host Manager (Plaintext HTTP)",
+        "tags": ["plaintext", "credentials", "shared-hosting", "server-admin"],
+        "recommendation": "WHM on port 2086 exposes the server administration panel over unencrypted HTTP. Root-level credentials are at risk of interception. All WHM access should use port 2087 (HTTPS). Restrict access to specific trusted IPs at the firewall level."
+    },
+    "2087": {
+        "service": "WHM SSL",
+        "severity": "info",
+        "category": "hosting",
+        "description": "WHM Web Host Manager (HTTPS)",
+        "tags": ["encrypted", "shared-hosting", "server-admin"],
+        "recommendation": "WHM SSL on port 2087 is the standard encrypted entry point for server administration on shared hosting platforms. This port is expected to be public-facing. Enable cPHulk brute-force protection and consider IP allow-listing this port if your hosting provider supports it."
+    },
+    "2095": {
+        "service": "Webmail",
+        "severity": "medium",
+        "category": "hosting",
+        "description": "cPanel Webmail (Plaintext HTTP)",
+        "tags": ["plaintext", "credentials", "shared-hosting"],
+        "recommendation": "Webmail on port 2095 accepts email credentials over an unencrypted HTTP connection. Credentials are exposed in transit. Redirect all users to Webmail SSL (port 2096) and enforce HTTPS-only access."
+    },
+    "2096": {
+        "service": "Webmail SSL",
+        "severity": "info",
+        "category": "hosting",
+        "description": "cPanel Webmail (HTTPS)",
+        "tags": ["encrypted", "shared-hosting"],
+        "recommendation": "Webmail SSL on port 2096 is the standard encrypted webmail interface for cPanel shared hosting. This port is expected to be public-facing. Ensure TLS certificates are valid and current."
+    },
+    "2375": {
+        "service": "Docker API",
+        "severity": "critical",
+        "category": "container",
+        "description": "Docker Remote API"
+    },
+    "2376": {
+        "service": "Docker TLS",
+        "severity": "high",
+        "category": "container",
+        "description": "Docker Remote API TLS"
+    },
+    "3000": {
+        "service": "Node.js App",
+        "severity": "low",
+        "category": "application",
+        "description": "Common Development Port"
+    },
+    "3306": {
+        "service": "MySQL",
+        "severity": "high",
+        "category": "database",
+        "description": "MySQL Database"
+    },
+    "3389": {
+        "service": "RDP",
+        "severity": "high",
+        "category": "remote-access",
+        "description": "Remote Desktop"
+    },
+    "5432": {
+        "service": "PostgreSQL",
+        "severity": "high",
+        "category": "database",
+        "description": "PostgreSQL Database"
+    },
+    "5900": {
+        "service": "VNC",
+        "severity": "high",
+        "category": "remote-access",
+        "description": "Virtual Network Computing"
+    },
+    "6379": {
+        "service": "Redis",
+        "severity": "critical",
+        "category": "database",
+        "description": "Redis Database"
+    },
+    "6380": {
+        "service": "Redis TLS",
+        "severity": "high",
+        "category": "database",
+        "description": "Redis TLS"
+    },
+    "8000": {
+        "service": "Development Server",
+        "severity": "low",
+        "category": "application",
+        "description": "Common Development Port"
+    },
+    "8080": {
+        "service": "Alternate HTTP",
+        "severity": "low",
+        "category": "web",
+        "description": "Alternate Web Server"
+    },
+    "8443": {
+        "service": "Plesk / Alternate HTTPS",
+        "severity": "medium",
+        "category": "hosting",
+        "description": "Control Panel or Alternate HTTPS"
+    },
+    "8888": {
+        "service": "Development Server",
+        "severity": "low",
+        "category": "application",
+        "description": "Common Admin Interface"
+    },
+    "9000": {
+        "service": "PHP-FPM",
+        "severity": "high",
+        "category": "application",
+        "description": "PHP FastCGI Process Manager"
+    },
+    "9200": {
+        "service": "Elasticsearch",
+        "severity": "critical",
+        "category": "search",
+        "description": "Elasticsearch REST API"
+    },
+    "9300": {
+        "service": "Elasticsearch Cluster",
+        "severity": "high",
+        "category": "search",
+        "description": "Elasticsearch Node Communication"
+    },
+    "10000": {
+        "service": "Webmin",
+        "severity": "high",
+        "category": "hosting",
+        "description": "Webmin Administration"
+    },
+    "15672": {
+        "service": "RabbitMQ Management",
+        "severity": "high",
+        "category": "messaging",
+        "description": "RabbitMQ Admin Interface"
+    },
+    "27017": {
+        "service": "MongoDB",
+        "severity": "critical",
+        "category": "database",
+        "description": "MongoDB Database"
+    },
+    "27018": {
+        "service": "MongoDB",
+        "severity": "critical",
+        "category": "database",
+        "description": "MongoDB Alternate Port"
+    }
+}
