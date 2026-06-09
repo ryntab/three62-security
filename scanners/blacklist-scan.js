@@ -33,9 +33,9 @@ const UNIQUE_DNSBL_ZONES = DNSBL_ZONES.filter((z, i, arr) =>
 
 class BlacklistScanner {
   constructor() {
-    // Isolated custom resolver instance to leverage specialized timeouts safely
     this.resolver = new dns.Resolver();
-    this.resolver.setCustomValues ? this.resolver.setCustomValues({ timeout: 3000, tries: 1 }) : null;
+    // Use reliable public resolvers — system resolver frequently fails in Docker/cloud envs
+    this.resolver.setServers(['1.1.1.1', '8.8.8.8']);
   }
 
   async scan(host) {
@@ -55,6 +55,7 @@ class BlacklistScanner {
     // --------------------------------------------------------------------------
     let primaryIp = null;
     try {
+      // Path 1: Direct A record lookup via custom resolver (1.1.1.1/8.8.8.8)
       const ips = await new Promise((resolve, reject) => {
         this.resolver.resolve4(cleanHost, (err, addresses) => err ? reject(err) : resolve(addresses));
       });
@@ -62,13 +63,21 @@ class BlacklistScanner {
         primaryIp = ips[0];
       }
     } catch {
-      findings.push({
-        severity: 'info',
-        category: 'blacklist',
-        title: 'Blacklist Check: No A Record to Check',
-        description: `Could not resolve an IPv4 address for ${cleanHost}. IP-based blacklist checks were skipped.`,
-        recommendation: 'Ensure DNS A records are configured for this domain.'
-      });
+      // Path 2: OS-level lookup — follows CNAME chains (handles Cloudflare, Squarespace, CDN proxies)
+      try {
+        const result = await dns.promises.lookup(cleanHost, { family: 4 });
+        if (result && result.address) {
+          primaryIp = result.address;
+        }
+      } catch {
+        findings.push({
+          severity: 'info',
+          category: 'blacklist',
+          title: 'Blacklist Check: No A Record to Check',
+          description: `Could not resolve an IPv4 address for ${cleanHost}. IP-based blacklist checks were skipped.`,
+          recommendation: 'Ensure DNS A records are configured for this domain.'
+        });
+      }
     }
 
     // --------------------------------------------------------------------------
